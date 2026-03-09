@@ -1,5 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory, redirect, url_for
-import mysql.connector
+from flask import Flask, request, jsonify, send_from_directory, redirect, url_for, render_templateimport mysql.connector
 from mysql.connector import Error
 import os
 from werkzeug.utils import secure_filename
