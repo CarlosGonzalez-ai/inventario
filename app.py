@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify, send_from_directory, redirect, url_for, render_templateimport mysql.connector
+from flask import Flask, request, jsonify, send_from_directory, redirect, url_for, render_template
+import mysql.connector
 from mysql.connector import Error
 import os
 from werkzeug.utils import secure_filename
@@ -12,21 +13,21 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 def conectar_bd():
     try:
         conexion = mysql.connector.connect(
-    host="MYSQLHOST",
-    port="MYSQLPORT",
-    user="MYSQLUSER",
-    password="MYSQLPASSWORD",
-    database="MYSQLDATABASE"
+            host=os.environ.get("MYSQLHOST"),
+            port=int(os.environ.get("MYSQLPORT", 3306)),
+            user=os.environ.get("MYSQLUSER"),
+            password=os.environ.get("MYSQLPASSWORD"),
+            database=os.environ.get("MYSQLDATABASE")
         )
         return conexion
     except Error as e:
         print("Error de conexion:", e)
         return None
-from flask import render_template
 
 @app.route("/")
 def index():
     return render_template("inventario.html")
+
 @app.route("/cargar", methods=["GET"])
 def cargar_datos():
     conexion = conectar_bd()
@@ -40,6 +41,7 @@ def cargar_datos():
     conexion.close()
 
     return jsonify(datos)
+
 @app.route("/guardar", methods=["POST"])
 def guardar_datos():
     numero = request.form.get("numero")
@@ -122,11 +124,11 @@ def respaldo():
 
     try:
         conexion_respaldo = mysql.connector.connect(
-            host="localhost",
-            port=3306,
-            user="root",
-            password="gonzalez30",
-            database="almacen_respaldo"
+            host=os.environ.get("MYSQLHOST_RESPALDO", "localhost"),
+            port=int(os.environ.get("MYSQLPORT_RESPALDO", 3306)),
+            user=os.environ.get("MYSQLUSER_RESPALDO", "root"),
+            password=os.environ.get("MYSQLPASSWORD_RESPALDO", ""),
+            database=os.environ.get("MYSQLDATABASE_RESPALDO", "almacen_respaldo")
         )
         cursor_respaldo = conexion_respaldo.cursor()
         for fila in filas:
@@ -142,6 +144,7 @@ def respaldo():
         return "Error al generar respaldo", 500
 
     return "Respaldo completado"
+
 @app.route("/actualizar_resultados", methods=["POST"])
 def actualizar_resultados():
     conexion = conectar_bd()
@@ -156,11 +159,11 @@ def actualizar_resultados():
 
     try:
         conexion_resultados = mysql.connector.connect(
-            host="localhost",
-            port=3306,
-            user="root",
-            password="gonzalez30",
-            database="almacen_resultados"
+            host=os.environ.get("MYSQLHOST_RESULTADOS", "localhost"),
+            port=int(os.environ.get("MYSQLPORT_RESULTADOS", 3306)),
+            user=os.environ.get("MYSQLUSER_RESULTADOS", "root"),
+            password=os.environ.get("MYSQLPASSWORD_RESULTADOS", ""),
+            database=os.environ.get("MYSQLDATABASE_RESULTADOS", "almacen_resultados")
         )
         cursor_result = conexion_resultados.cursor()
         cursor_result.execute("TRUNCATE TABLE resumen")
@@ -174,6 +177,7 @@ def actualizar_resultados():
         return "Error al actualizar resultados", 500
 
     return "Resultados actualizados"
+
 @app.route("/eliminar", methods=["POST"])
 def eliminar():
     datos = request.get_json()
@@ -199,7 +203,6 @@ def eliminar():
 
     return jsonify({"status": True})
 
-    if __name__ == "__main__":
-     import os
+if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
