@@ -398,6 +398,30 @@ async function eliminarFila(btn, numero){
     }
 }
 </script>
+    <script>
+document.onkeydown = function(e) {
+    if (e.keyCode == 123) { 
+        return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+        return false;
+    }
+    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+        return false;
+    }
+}
+</script>
+<script>
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+});
+</script>
+<script>
+document.write(atob("PGgxPkJpZW52ZW5pZG88L2gxPg=="));
+</script>
+<script>
+document.write(atob("PGgxPkJpZW52ZW5pZG88L2gxPg=="));
+</script>
 </div>
 </body>
 </html>
