@@ -23,9 +23,11 @@ def conectar_bd():
     except Error as e:
         print("Error de conexion:", e)
         return None
+from flask import render_template
+
 @app.route("/")
 def index():
-    return send_from_directory(os.getcwd(), "inventario.html")
+    return render_template("inventario.html")
 @app.route("/cargar", methods=["GET"])
 def cargar_datos():
     conexion = conectar_bd()
