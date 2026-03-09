@@ -380,7 +380,6 @@ async function subirFoto(input){
     let resultado = await respuesta.json();
     console.log("imagen guardada:", resultado.nombre);
 }
-
 async function eliminarFila(btn, numero){
     try {
         let response = await fetch("/eliminar", {
