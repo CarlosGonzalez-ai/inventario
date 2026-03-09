@@ -25,12 +25,11 @@ def conectar_bd():
         return None
 @app.route("/")
 def index():
-    return send_from_directory(".", path="inventario.html")
-
+ return send_from_directory(os.getcwd(), "inventario.html")
 @app.route("/cargar", methods=["GET"])
 def cargar_datos():
     conexion = conectar_bd()
-    if not conexion:
+    if not conexion: 
         return jsonify([])
 
     cursor = conexion.cursor()
@@ -199,19 +198,7 @@ def eliminar():
 
     return jsonify({"status": True})
 
-if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)
-
-
-    import os
-
-port = int(os.environ.get("PORT", 8080))
-app.run(host="0.0.0.0", port=port)
-from flask import Flask, render_template
-import mysql.connector
-
-app = Flask(__name__)
-
-@app.route("/")
-def inicio():
-    return render_template("inventario.html")
+    if __name__ == "__main__":
+     import os
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
