@@ -25,7 +25,7 @@ def conectar_bd():
         return None
 @app.route("/")
 def index():
- return send_from_directory(os.getcwd(), "inventario.html")
+    return send_from_directory(os.getcwd(), "inventario.html")
 @app.route("/cargar", methods=["GET"])
 def cargar_datos():
     conexion = conectar_bd()
